@@ -1,12 +1,8 @@
-import { VERSION } from '../core/index';
+import { VERSAO } from '../core/index';
 
-/**
- * StateLab command-line interface.
- * Module commands are added in Stage 6.
- */
-function main(): void {
-  console.log(`StateLab v${VERSION}`);
+function iniciar(): void {
+  console.log(`StateLab v${VERSAO}`);
   console.log('Comandos dos módulos serão adicionados na Etapa 6.');
 }
 
-main();
+iniciar();
