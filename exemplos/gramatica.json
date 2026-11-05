@@ -1,0 +1,8 @@
+{
+  "variaveis": ["S"],
+  "terminais": ["a", "b"],
+  "simboloInicial": "S",
+  "producoes": {
+    "S": ["aSb", "λ"]
+  }
+}
