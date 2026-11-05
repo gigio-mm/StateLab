@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs';
 import { VAZIO, validarCadeia } from './linguagens';
 
 export type ResultadoSimulacao = {
@@ -14,9 +13,8 @@ export type Automato = {
   transicoes: Record<string, Record<string, string[]>>;
 };
 
-export function carregarAutomatoJson(caminhoArquivo: string): Automato {
-  const conteudo = readFileSync(caminhoArquivo, 'utf-8');
-  const dados = JSON.parse(conteudo) as Partial<Automato>;
+export function parsearAutomatoJson(conteudoJson: string): Automato {
+  const dados = JSON.parse(conteudoJson) as Partial<Automato>;
 
   if (
     !Array.isArray(dados.estados) ||
