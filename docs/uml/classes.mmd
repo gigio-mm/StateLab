@@ -1,93 +1,74 @@
 classDiagram
   direction TB
 
-  class Passo~Instantaneo~ {
-    +indice: number
-    +instantaneo: Instantaneo
-    +descricao: string
-  }
-
-  class Rastreamento~Instantaneo~ {
-    +passos: Passo~Instantaneo~[]
-    +status: StatusSimulacao
+  class ResultadoSimulacao {
     +aceita: boolean
-    +motivo: string
+    +passos: string[]
   }
 
-  class ConstrutorRastreamento~Instantaneo~ {
-    +adicionar(instantaneo: Instantaneo, descricao: string) Passo~Instantaneo~
-    +finalizar(status: StatusSimulacao, motivo: string) Rastreamento~Instantaneo~
-  }
-
-  class Alfabeto {
-    +simbolos: Set~string~
-    +contemSimbolo(simbolo: string) boolean
-    +validarCadeia(cadeia: string) boolean
-    +gerarEstrelaKleene(ateTamanho: number) string[]
-    +gerarFechoPositivo(ateTamanho: number) string[]
-  }
-
-  class LinguagemFormal {
-    +alfabeto: Alfabeto
-    +palavras: Set~string~
-    +pertence(cadeia: string) boolean
+  class ModuloLinguagens {
+    <<src/linguagens.ts>>
     +tamanhoCadeia(cadeia: string) number
+    +validarCadeia(alfabeto: string[], cadeia: string) boolean
+    +pertenceLinguagem(linguagem: string[], cadeia: string) boolean
     +concatenar(u: string, v: string) string
+    +gerarFechoPositivo(alfabeto: string[], ateTamanho: number) string[]
+    +gerarEstrelaKleene(alfabeto: string[], ateTamanho: number) string[]
+    +analisarCadeia(alfabeto: string[], cadeia: string, linguagem?: string[]) ResultadoSimulacao
   }
 
-  class AutomatoFinito {
-    +estados: Set~string~
-    +alfabeto: Alfabeto
+  class Automato {
+    <<src/automato.ts>>
+    +estados: string[]
+    +alfabeto: string[]
     +estadoInicial: string
-    +estadosFinais: Set~string~
-    +transicoes: TransicaoAF[]
-    +ehDeterministico() boolean
-    +fechoEpsilon(estados: Set~string~) Set~string~
-    +simular(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoAF~
+    +estadosFinais: string[]
+    +transicoes: Record~string, Record~string, string[]~~
+    +carregarAutomatoJson(caminho: string) Automato
+    +simularAutomato(automato: Automato, cadeia: string) ResultadoSimulacao
   }
 
-  class GramaticaLivreContexto {
-    +variaveis: Set~string~
-    +terminais: Alfabeto
-    +producoes: ProducaoGLC[]
+  class Gramatica {
+    <<src/gramatica.ts>>
+    +variaveis: string[]
+    +terminais: string[]
     +simboloInicial: string
-    +derivarMaisAEsquerda(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoGLC~
-    +converterParaFNC() GramaticaLivreContexto
-    +reconhecerCYK(cadeia: string) ResultadoCYK
+    +producoes: Record~string, string[]~
+    +carregarGramaticaJson(caminho: string) Gramatica
+    +simularGramatica(gramatica: Gramatica, cadeia: string) ResultadoSimulacao
   }
 
-  class AutomatoComPilha {
-    +estados: Set~string~
-    +alfabetoEntrada: Alfabeto
-    +alfabetoPilha: Alfabeto
-    +estadoInicial: string
-    +simboloInicialPilha: string
-    +estadosFinais: Set~string~
-    +modoAceitacao: ModoAceitacaoAP
-    +transicoes: TransicaoAP[]
-    +simular(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoAP~
+  class ModuloPilha {
+    <<src/pilha.ts>>
+    +empilhar(pilha: string[], simbolo: string) void
+    +desempilhar(pilha: string[]) string
+    +simularPilha(cadeia: string) ResultadoSimulacao
   }
 
-  class MaquinaDeTuring {
-    +estados: Set~string~
-    +alfabetoEntrada: Alfabeto
-    +alfabetoFita: Alfabeto
-    +estadoInicial: string
-    +estadosAceitacao: Set~string~
-    +estadosRejeicao: Set~string~
-    +simboloBranco: string
-    +transicoes: TransicaoMT[]
-    +simular(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoMT~
+  class ModuloTuring {
+    <<src/turing.ts>>
+    +simularTuring(cadeia: string) ResultadoSimulacao
   }
 
-  Rastreamento *-- Passo
-  ConstrutorRastreamento ..> Rastreamento : cria
-  LinguagemFormal *-- Alfabeto
-  AutomatoFinito *-- Alfabeto
-  AutomatoFinito ..> Rastreamento : produz
-  GramaticaLivreContexto *-- Alfabeto
-  GramaticaLivreContexto ..> Rastreamento : produz
-  AutomatoComPilha *-- Alfabeto
-  AutomatoComPilha ..> Rastreamento : produz
-  MaquinaDeTuring *-- Alfabeto
-  MaquinaDeTuring ..> Rastreamento : produz
+  class ModuloComplexidade {
+    <<src/complexidade.ts>>
+    +TABELA_COMPLEXIDADE: ItemComplexidade[]
+    +exibirTabelaComplexidade() void
+  }
+
+  class MenuCLI {
+    <<src/cli.ts>>
+    +iniciarMenu() Promise~void~
+  }
+
+  MenuCLI --> ModuloLinguagens
+  MenuCLI --> Automato
+  MenuCLI --> Gramatica
+  MenuCLI --> ModuloPilha
+  MenuCLI --> ModuloTuring
+  MenuCLI --> ModuloComplexidade
+  ModuloLinguagens ..> ResultadoSimulacao
+  Automato ..> ResultadoSimulacao
+  Gramatica ..> ResultadoSimulacao
+  ModuloPilha ..> ResultadoSimulacao
+  ModuloTuring ..> ResultadoSimulacao

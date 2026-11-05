@@ -1,45 +1,35 @@
 # Modelagem UML — StateLab
 
-Este diretório contém os diagramas UML da arquitetura do **StateLab** (arquivos `.mmd` puros e versão renderizável abaixo).
+Diagramas UML atualizados refletindo a arquitetura enxuta em `src/`.
 
----
-
-## 1. Diagrama de Casos de Uso (`casos-de-uso.mmd`)
+## 1. Casos de Uso (`casos-de-uso.mmd`)
 
 ```mermaid
 flowchart LR
   Estudante(["Estudante / Usuário"])
 
   subgraph M1["Módulo 1: Linguagens Formais"]
-    UC1["UC01: Definir alfabeto Σ e linguagem finita L"]
-    UC2["UC02: Validar cadeia em Σ* e pertinência em L"]
-    UC3["UC03: Calcular tamanho, concatenação, Σ* e Σ+ (até n)"]
+    UC1["UC01: Definir Σ e L, validar cadeia, calcular |w|, u·v, Σ* e Σ+"]
   end
 
-  subgraph M2["Módulo 2: Autômatos Finitos (AFD / AFN)"]
-    UC4["UC04: Importar / exportar autômato via JSON"]
-    UC5["UC05: Criar / editar estados e transições no editor visual"]
-    UC6["UC06: Simular cadeia passo a passo (AFD e AFN)"]
+  subgraph M2["Módulo 2: Autômatos Finitos"]
+    UC2["UC02: Carregar AFD/AFN por JSON e simular cadeia passo a passo"]
   end
 
-  subgraph M3["Módulo 3: Gramática Livre de Contexto (GLC)"]
-    UC7["UC07: Definir variáveis, terminais, produções e símbolo inicial"]
-    UC8["UC08: Executar derivação passo a passo e exibir árvore"]
-    UC9["UC09: Verificar pertinência via CYK (FNC)"]
+  subgraph M3["Módulo 3: Gramática Livre de Contexto"]
+    UC3["UC03: Carregar GLC e exibir derivação passo a passo e árvore"]
   end
 
-  subgraph M4["Módulo 4: Autômato com Pilha (AP)"]
-    UC10["UC10: Carregar AP (JSON ou preset aⁿbⁿ)"]
-    UC11["UC11: Simular AP exibindo leitura, estado e pilha"]
+  subgraph M4["Módulo 4: Autômato com Pilha"]
+    UC4["UC04: Simular AP para aⁿbⁿ exibindo leitura, estado e pilha"]
   end
 
-  subgraph M5["Módulo 5: Máquina de Turing (MT)"]
-    UC12["UC12: Carregar MT (JSON, preset w#w ou soma unária)"]
-    UC13["UC13: Simular MT exibindo fita e cabeçote passo a passo"]
+  subgraph M5["Módulo 5: Máquina de Turing"]
+    UC5["UC05: Simular soma unária exibindo estado, fita e cabeçote"]
   end
 
-  subgraph M6["Módulo 6: Complexidade Computacional"]
-    UC14["UC14: Consultar análise assintótica (O, Ω, Θ) dos algoritmos"]
+  subgraph M6["Módulo 6: Complexidade"]
+    UC6["UC06: Exibir tabela O, Ω e Θ (melhor, médio e pior caso)"]
   end
 
   Estudante --> UC1
@@ -48,136 +38,86 @@ flowchart LR
   Estudante --> UC4
   Estudante --> UC5
   Estudante --> UC6
-  Estudante --> UC7
-  Estudante --> UC8
-  Estudante --> UC9
-  Estudante --> UC10
-  Estudante --> UC11
-  Estudante --> UC12
-  Estudante --> UC13
-  Estudante --> UC14
 ```
 
-### Especificação resumida dos Casos de Uso
-
-| Código | Caso de Uso                   | Módulo | Entrada                                                  | Saída                                                                             |
-| ------ | ----------------------------- | ------ | -------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| UC01   | Definir Σ e L                 | 1      | Conjunto de símbolos Σ e conjunto finito de cadeias L    | Instâncias validadas de `Alfabeto` e `LinguagemFormal`                            |
-| UC02   | Validar cadeia em Σ* e L      | 1      | Cadeia `w`                                               | Validade em Σ*, símbolos inválidos (se houver) e pertinência `w ∈ L`              |
-| UC03   | Operações sobre cadeias e Σ   | 1      | Cadeias `u`, `v` e limite `n`                            | `\|u\|`, `u·v`, listagem de `Σ*` e `Σ+` até comprimento `n`                       |
-| UC04   | Importar/exportar AF por JSON | 2      | Arquivo/texto JSON                                       | `AutomatoFinito` validado ou lista de `ProblemaValidacao`                         |
-| UC05   | Editar autômato visualmente   | 2      | Interações no grafo (estados/transições)                 | Definição sincronizada com o JSON                                                 |
-| UC06   | Simular AFD / AFN             | 2      | `AutomatoFinito` e cadeia `w`                            | `Rastreamento<InstantaneoAF>` com transições passo a passo e `ACEITA`/`REJEITADA` |
-| UC07   | Definir GLC                   | 3      | Variáveis `V`, terminais `Σ`, produções `P`, inicial `S` | `GramaticaLivreContexto` validada                                                 |
-| UC08   | Derivar cadeia e gerar árvore | 3      | `GramaticaLivreContexto` e cadeia `w`                    | Passos da derivação mais à esquerda e árvore de derivação simplificada            |
-| UC09   | Reconhecer cadeia com CYK     | 3      | `GramaticaLivreContexto` e cadeia `w`                    | Gramática em FNC, tabela CYK e decisão de aceitação                               |
-| UC10   | Carregar AP                   | 4      | JSON ou preset `L = { aⁿbⁿ \| n ≥ 1 }`                   | `AutomatoComPilha` validado                                                       |
-| UC11   | Simular AP                    | 4      | `AutomatoComPilha` e cadeia `w`                          | `Rastreamento<InstantaneoAP>` com leitura, estado e conteúdo da pilha             |
-| UC12   | Carregar Máquina de Turing    | 5      | JSON, preset `w#w` (Opção A) ou soma unária (Opção B)    | `MaquinaDeTuring` validada                                                        |
-| UC13   | Simular Máquina de Turing     | 5      | `MaquinaDeTuring` e cadeia na fita                       | `Rastreamento<InstantaneoMT>` com fita, posição do cabeçote e resultado final     |
-| UC14   | Consultar complexidade        | 6      | Seleção de módulo/algoritmo                              | Tabela com melhor, médio e pior caso em `O()`, `Ω()` e `Θ()`                      |
-
----
-
-## 2. Diagrama de Classes (`classes.mmd`)
+## 2. Diagrama de Módulos e Tipos (`classes.mmd`)
 
 ```mermaid
 classDiagram
   direction TB
 
-  class Passo~Instantaneo~ {
-    +indice: number
-    +instantaneo: Instantaneo
-    +descricao: string
-  }
-
-  class Rastreamento~Instantaneo~ {
-    +passos: Passo~Instantaneo~[]
-    +status: StatusSimulacao
+  class ResultadoSimulacao {
     +aceita: boolean
-    +motivo: string
+    +passos: string[]
   }
 
-  class ConstrutorRastreamento~Instantaneo~ {
-    +adicionar(instantaneo: Instantaneo, descricao: string) Passo~Instantaneo~
-    +finalizar(status: StatusSimulacao, motivo: string) Rastreamento~Instantaneo~
-  }
-
-  class Alfabeto {
-    +simbolos: Set~string~
-    +contemSimbolo(simbolo: string) boolean
-    +validarCadeia(cadeia: string) boolean
-    +gerarEstrelaKleene(ateTamanho: number) string[]
-    +gerarFechoPositivo(ateTamanho: number) string[]
-  }
-
-  class LinguagemFormal {
-    +alfabeto: Alfabeto
-    +palavras: Set~string~
-    +pertence(cadeia: string) boolean
+  class ModuloLinguagens {
+    <<src/linguagens.ts>>
     +tamanhoCadeia(cadeia: string) number
+    +validarCadeia(alfabeto: string[], cadeia: string) boolean
+    +pertenceLinguagem(linguagem: string[], cadeia: string) boolean
     +concatenar(u: string, v: string) string
+    +gerarFechoPositivo(alfabeto: string[], ateTamanho: number) string[]
+    +gerarEstrelaKleene(alfabeto: string[], ateTamanho: number) string[]
+    +analisarCadeia(alfabeto: string[], cadeia: string, linguagem?: string[]) ResultadoSimulacao
   }
 
-  class AutomatoFinito {
-    +estados: Set~string~
-    +alfabeto: Alfabeto
+  class Automato {
+    <<src/automato.ts>>
+    +estados: string[]
+    +alfabeto: string[]
     +estadoInicial: string
-    +estadosFinais: Set~string~
-    +transicoes: TransicaoAF[]
-    +ehDeterministico() boolean
-    +fechoEpsilon(estados: Set~string~) Set~string~
-    +simular(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoAF~
+    +estadosFinais: string[]
+    +transicoes: Record~string, Record~string, string[]~~
+    +carregarAutomatoJson(caminho: string) Automato
+    +simularAutomato(automato: Automato, cadeia: string) ResultadoSimulacao
   }
 
-  class GramaticaLivreContexto {
-    +variaveis: Set~string~
-    +terminais: Alfabeto
-    +producoes: ProducaoGLC[]
+  class Gramatica {
+    <<src/gramatica.ts>>
+    +variaveis: string[]
+    +terminais: string[]
     +simboloInicial: string
-    +derivarMaisAEsquerda(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoGLC~
-    +converterParaFNC() GramaticaLivreContexto
-    +reconhecerCYK(cadeia: string) ResultadoCYK
+    +producoes: Record~string, string[]~
+    +carregarGramaticaJson(caminho: string) Gramatica
+    +simularGramatica(gramatica: Gramatica, cadeia: string) ResultadoSimulacao
   }
 
-  class AutomatoComPilha {
-    +estados: Set~string~
-    +alfabetoEntrada: Alfabeto
-    +alfabetoPilha: Alfabeto
-    +estadoInicial: string
-    +simboloInicialPilha: string
-    +estadosFinais: Set~string~
-    +modoAceitacao: ModoAceitacaoAP
-    +transicoes: TransicaoAP[]
-    +simular(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoAP~
+  class ModuloPilha {
+    <<src/pilha.ts>>
+    +empilhar(pilha: string[], simbolo: string) void
+    +desempilhar(pilha: string[]) string
+    +simularPilha(cadeia: string) ResultadoSimulacao
   }
 
-  class MaquinaDeTuring {
-    +estados: Set~string~
-    +alfabetoEntrada: Alfabeto
-    +alfabetoFita: Alfabeto
-    +estadoInicial: string
-    +estadosAceitacao: Set~string~
-    +estadosRejeicao: Set~string~
-    +simboloBranco: string
-    +transicoes: TransicaoMT[]
-    +simular(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoMT~
+  class ModuloTuring {
+    <<src/turing.ts>>
+    +simularTuring(cadeia: string) ResultadoSimulacao
   }
 
-  Rastreamento *-- Passo
-  ConstrutorRastreamento ..> Rastreamento : cria
-  LinguagemFormal *-- Alfabeto
-  AutomatoFinito *-- Alfabeto
-  AutomatoFinito ..> Rastreamento : produz
-  GramaticaLivreContexto *-- Alfabeto
-  GramaticaLivreContexto ..> Rastreamento : produz
-  AutomatoComPilha *-- Alfabeto
-  AutomatoComPilha ..> Rastreamento : produz
-  MaquinaDeTuring *-- Alfabeto
-  MaquinaDeTuring ..> Rastreamento : produz
+  class ModuloComplexidade {
+    <<src/complexidade.ts>>
+    +TABELA_COMPLEXIDADE: ItemComplexidade[]
+    +exibirTabelaComplexidade() void
+  }
+
+  class MenuCLI {
+    <<src/cli.ts>>
+    +iniciarMenu() Promise~void~
+  }
+
+  MenuCLI --> ModuloLinguagens
+  MenuCLI --> Automato
+  MenuCLI --> Gramatica
+  MenuCLI --> ModuloPilha
+  MenuCLI --> ModuloTuring
+  MenuCLI --> ModuloComplexidade
+  ModuloLinguagens ..> ResultadoSimulacao
+  Automato ..> ResultadoSimulacao
+  Gramatica ..> ResultadoSimulacao
+  ModuloPilha ..> ResultadoSimulacao
+  ModuloTuring ..> ResultadoSimulacao
 ```
-
----
 
 ## 3. Diagrama de Sequência (`sequencia.mmd`)
 
@@ -185,28 +125,12 @@ classDiagram
 sequenceDiagram
   autonumber
   actor Usuario as Usuário
-  participant Interface as Interface (CLI / React)
-  participant Validador as Validador JSON (Zod)
-  participant Modelo as Modelo Computacional (AFD/AFN/GLC/AP/MT)
-  participant Construtor as ConstrutorRastreamento
+  participant CLI as Menu Console (src/cli.ts)
+  participant Modulo as Simulador do Módulo (src/*.ts)
 
-  Usuario->>Interface: Informa modelo (JSON/editor) e cadeia de entrada w
-  Interface->>Validador: validarDefinicao(dados)
-  alt Definição inválida
-    Validador-->>Interface: Resultado { sucesso: false, erro: ProblemaValidacao[] }
-    Interface-->>Usuario: Exibe lista de problemas em português
-  else Definição válida
-    Validador-->>Interface: Resultado { sucesso: true, valor: Modelo }
-    Interface->>Modelo: simular(w, limites)
-    activate Modelo
-    Modelo->>Construtor: adicionar(instantaneoInicial, "Configuração inicial")
-    loop A cada transição até aceitar, rejeitar ou atingir maxPassos
-      Modelo->>Construtor: adicionar(instantaneoAtual, descricaoTransicao)
-    end
-    Modelo->>Construtor: finalizar(status, motivo)
-    Construtor-->>Modelo: Rastreamento<Instantaneo>
-    deactivate Modelo
-    Modelo-->>Interface: Rastreamento<Instantaneo>
-    Interface-->>Usuario: Reproduz passos (grafo/árvore/pilha/fita) + resultado final
-  end
+  Usuario->>CLI: Escolhe opção (1 a 6) e informa cadeia de entrada
+  CLI->>Modulo: Executa função do módulo (ex.: simularAutomato / simularGramatica)
+  Modulo->>Modulo: Valida entrada e processa passo a passo
+  Modulo-->>CLI: Retorna { aceita: boolean, passos: string[] }
+  CLI-->>Usuario: Imprime os passos e o resultado final no console
 ```
