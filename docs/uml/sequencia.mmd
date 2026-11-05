@@ -1,0 +1,27 @@
+sequenceDiagram
+  autonumber
+  actor Usuario as Usuário
+  participant Interface as Interface (CLI / React)
+  participant Validador as Validador JSON (Zod)
+  participant Modelo as Modelo Computacional (AFD/AFN/GLC/AP/MT)
+  participant Construtor as ConstrutorRastreamento
+
+  Usuario->>Interface: Informa modelo (JSON/editor) e cadeia de entrada w
+  Interface->>Validador: validarDefinicao(dados)
+  alt Definição inválida
+    Validador-->>Interface: Resultado { sucesso: false, erro: ProblemaValidacao[] }
+    Interface-->>Usuario: Exibe lista de problemas em português
+  else Definição válida
+    Validador-->>Interface: Resultado { sucesso: true, valor: Modelo }
+    Interface->>Modelo: simular(w, limites)
+    activate Modelo
+    Modelo->>Construtor: adicionar(instantaneoInicial, "Configuração inicial")
+    loop A cada transição até aceitar, rejeitar ou atingir maxPassos
+      Modelo->>Construtor: adicionar(instantaneoAtual, descricaoTransicao)
+    end
+    Modelo->>Construtor: finalizar(status, motivo)
+    Construtor-->>Modelo: Rastreamento<Instantaneo>
+    deactivate Modelo
+    Modelo-->>Interface: Rastreamento<Instantaneo>
+    Interface-->>Usuario: Reproduz passos (grafo/árvore/pilha/fita) + resultado final
+  end

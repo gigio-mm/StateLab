@@ -1,0 +1,93 @@
+classDiagram
+  direction TB
+
+  class Passo~Instantaneo~ {
+    +indice: number
+    +instantaneo: Instantaneo
+    +descricao: string
+  }
+
+  class Rastreamento~Instantaneo~ {
+    +passos: Passo~Instantaneo~[]
+    +status: StatusSimulacao
+    +aceita: boolean
+    +motivo: string
+  }
+
+  class ConstrutorRastreamento~Instantaneo~ {
+    +adicionar(instantaneo: Instantaneo, descricao: string) Passo~Instantaneo~
+    +finalizar(status: StatusSimulacao, motivo: string) Rastreamento~Instantaneo~
+  }
+
+  class Alfabeto {
+    +simbolos: Set~string~
+    +contemSimbolo(simbolo: string) boolean
+    +validarCadeia(cadeia: string) boolean
+    +gerarEstrelaKleene(ateTamanho: number) string[]
+    +gerarFechoPositivo(ateTamanho: number) string[]
+  }
+
+  class LinguagemFormal {
+    +alfabeto: Alfabeto
+    +palavras: Set~string~
+    +pertence(cadeia: string) boolean
+    +tamanhoCadeia(cadeia: string) number
+    +concatenar(u: string, v: string) string
+  }
+
+  class AutomatoFinito {
+    +estados: Set~string~
+    +alfabeto: Alfabeto
+    +estadoInicial: string
+    +estadosFinais: Set~string~
+    +transicoes: TransicaoAF[]
+    +ehDeterministico() boolean
+    +fechoEpsilon(estados: Set~string~) Set~string~
+    +simular(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoAF~
+  }
+
+  class GramaticaLivreContexto {
+    +variaveis: Set~string~
+    +terminais: Alfabeto
+    +producoes: ProducaoGLC[]
+    +simboloInicial: string
+    +derivarMaisAEsquerda(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoGLC~
+    +converterParaFNC() GramaticaLivreContexto
+    +reconhecerCYK(cadeia: string) ResultadoCYK
+  }
+
+  class AutomatoComPilha {
+    +estados: Set~string~
+    +alfabetoEntrada: Alfabeto
+    +alfabetoPilha: Alfabeto
+    +estadoInicial: string
+    +simboloInicialPilha: string
+    +estadosFinais: Set~string~
+    +modoAceitacao: ModoAceitacaoAP
+    +transicoes: TransicaoAP[]
+    +simular(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoAP~
+  }
+
+  class MaquinaDeTuring {
+    +estados: Set~string~
+    +alfabetoEntrada: Alfabeto
+    +alfabetoFita: Alfabeto
+    +estadoInicial: string
+    +estadosAceitacao: Set~string~
+    +estadosRejeicao: Set~string~
+    +simboloBranco: string
+    +transicoes: TransicaoMT[]
+    +simular(cadeia: string, limites?: LimitesSimulacao) Rastreamento~InstantaneoMT~
+  }
+
+  Rastreamento *-- Passo
+  ConstrutorRastreamento ..> Rastreamento : cria
+  LinguagemFormal *-- Alfabeto
+  AutomatoFinito *-- Alfabeto
+  AutomatoFinito ..> Rastreamento : produz
+  GramaticaLivreContexto *-- Alfabeto
+  GramaticaLivreContexto ..> Rastreamento : produz
+  AutomatoComPilha *-- Alfabeto
+  AutomatoComPilha ..> Rastreamento : produz
+  MaquinaDeTuring *-- Alfabeto
+  MaquinaDeTuring ..> Rastreamento : produz

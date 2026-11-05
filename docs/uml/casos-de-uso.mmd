@@ -1,0 +1,49 @@
+flowchart LR
+  Estudante(["Estudante / Usuário"])
+
+  subgraph M1["Módulo 1: Linguagens Formais"]
+    UC1["UC01: Definir alfabeto Σ e linguagem finita L"]
+    UC2["UC02: Validar cadeia em Σ* e pertinência em L"]
+    UC3["UC03: Calcular tamanho, concatenação, Σ* e Σ+ (até n)"]
+  end
+
+  subgraph M2["Módulo 2: Autômatos Finitos (AFD / AFN)"]
+    UC4["UC04: Importar / exportar autômato via JSON"]
+    UC5["UC05: Criar / editar estados e transições no editor visual"]
+    UC6["UC06: Simular cadeia passo a passo (AFD e AFN)"]
+  end
+
+  subgraph M3["Módulo 3: Gramática Livre de Contexto (GLC)"]
+    UC7["UC07: Definir variáveis, terminais, produções e símbolo inicial"]
+    UC8["UC08: Executar derivação passo a passo e exibir árvore"]
+    UC9["UC09: Verificar pertinência via CYK (FNC)"]
+  end
+
+  subgraph M4["Módulo 4: Autômato com Pilha (AP)"]
+    UC10["UC10: Carregar AP (JSON ou preset aⁿbⁿ)"]
+    UC11["UC11: Simular AP exibindo leitura, estado e pilha"]
+  end
+
+  subgraph M5["Módulo 5: Máquina de Turing (MT)"]
+    UC12["UC12: Carregar MT (JSON, preset w#w ou soma unária)"]
+    UC13["UC13: Simular MT exibindo fita e cabeçote passo a passo"]
+  end
+
+  subgraph M6["Módulo 6: Complexidade Computacional"]
+    UC14["UC14: Consultar análise assintótica (O, Ω, Θ) dos algoritmos"]
+  end
+
+  Estudante --> UC1
+  Estudante --> UC2
+  Estudante --> UC3
+  Estudante --> UC4
+  Estudante --> UC5
+  Estudante --> UC6
+  Estudante --> UC7
+  Estudante --> UC8
+  Estudante --> UC9
+  Estudante --> UC10
+  Estudante --> UC11
+  Estudante --> UC12
+  Estudante --> UC13
+  Estudante --> UC14
