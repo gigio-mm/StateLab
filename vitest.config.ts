@@ -4,8 +4,9 @@ export default defineConfig({
   test: {
     include: ['tests/**/*.test.ts'],
     environment: 'node',
+    passWithNoTests: true,
     coverage: {
-      include: ['src/core/**/*.ts'],
+      include: ['src/**/*.ts'],
       reporter: ['text', 'html'],
     },
   },
