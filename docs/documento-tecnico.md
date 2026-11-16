@@ -189,9 +189,3 @@ Considere $n = |w|$ (comprimento da cadeia de entrada), $|\Sigma|$ o tamanho do 
 O **StateLab** cumpre todos os requisitos funcionais e técnicos propostos na disciplina de Aspectos Teóricos da Computação, permitindo experimentar na prática a Hierarquia de Chomsky (Linguagens Regulares com AFD/AFN, Livres de Contexto com GLC/AP e Recursivamente Enumeráveis com Máquina de Turing) e relacionar cada modelo à sua complexidade assintótica. A escolha de uma arquitetura enxuta em TypeScript, com um módulo por arquivo e saída passo a passo padronizada, tornou o código direto, testável e simples de demonstrar.
 
 ---
-
-## Referências
-
-- SIPSER, Michael. _Introdução à Teoria da Computação_. 2ª ed. São Paulo: Cengage Learning, 2007.
-- HOPCROFT, John E.; ULLMAN, Jeffrey D.; MOTWANI, Rajeev. _Introdução à Teoria de Autômatos, Linguagens e Computação_. 2ª ed. Rio de Janeiro: Elsevier, 2002.
-- MENEZES, Paulo Blauth. _Linguagens Formais e Autômatos_. 6ª ed. Porto Alegre: Bookman, 2010.
