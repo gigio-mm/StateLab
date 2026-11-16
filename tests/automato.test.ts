@@ -1,9 +1,10 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { carregarAutomatoJson, simularAutomato } from '../src/automato';
+import { parsearAutomatoJson, simularAutomato } from '../src/automato';
 
 describe('Módulo 2 - Autômato Finito (AFD e AFN)', () => {
   it('executa o exemplo do enunciado (AFD com entrada "ab")', () => {
-    const afd = carregarAutomatoJson('exemplos/afd.json');
+    const afd = parsearAutomatoJson(readFileSync('exemplos/afd.json', 'utf-8'));
     const resultado = simularAutomato(afd, 'ab');
 
     expect(resultado.aceita).toBe(true);
@@ -11,7 +12,7 @@ describe('Módulo 2 - Autômato Finito (AFD e AFN)', () => {
   });
 
   it('rejeita cadeia inválida no AFD', () => {
-    const afd = carregarAutomatoJson('exemplos/afd.json');
+    const afd = parsearAutomatoJson(readFileSync('exemplos/afd.json', 'utf-8'));
     const resultado = simularAutomato(afd, 'aa');
 
     expect(resultado.aceita).toBe(false);
@@ -19,7 +20,7 @@ describe('Módulo 2 - Autômato Finito (AFD e AFN)', () => {
   });
 
   it('simula AFN (cadeias terminadas em "ab")', () => {
-    const afn = carregarAutomatoJson('exemplos/afn.json');
+    const afn = parsearAutomatoJson(readFileSync('exemplos/afn.json', 'utf-8'));
 
     expect(simularAutomato(afn, 'aab')).toEqual({
       aceita: true,

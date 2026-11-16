@@ -21,6 +21,9 @@ Projeto prático de **Aspectos Teóricos da Computação (AV3)** — Prof. Ildo 
 # Instalar dependências
 npm install
 
+# Abrir a interface gráfica em React no navegador (Bônus +1,0 ponto)
+npm run dev
+
 # Executar o menu interativo no console
 npm run cli
 
@@ -31,21 +34,23 @@ npm test
 npm run check
 ```
 
-> No menu interativo (`npm run cli`), basta pressionar **Enter** nas perguntas para usar os valores padrão do enunciado.
+> Na interface gráfica (`npm run dev`), é possível alternar pelas 6 abas e navegar passo a passo (_Anterior / Próximo_) visualizando os **estados dos autômatos**, a **pilha do AP** e a **fita da Máquina de Turing**. No menu de console (`npm run cli`), basta pressionar **Enter** nas perguntas para usar os valores padrão do enunciado.
 
 ---
 
 ## Estrutura do Projeto
 
 ```text
+index.html         -> Entrada HTML da interface web (Vite)
 src/
   linguagens.ts    -> Módulo 1: alfabeto Σ, linguagem L, validação, Σ*, Σ+, tamanho e concatenação
-  automato.ts      -> Módulo 2: simulador unificado de AFD e AFN + carregamento por JSON
+  automato.ts      -> Módulo 2: simulador unificado de AFD e AFN + leitura de JSON
   gramatica.ts     -> Módulo 3: GLC com derivação mais à esquerda (BFS com poda) e árvore textual
   pilha.ts         -> Módulo 4: Autômato com Pilha para L = { aⁿbⁿ | n ≥ 1 }
   turing.ts        -> Módulo 5: Máquina de Turing para soma unária (Opção B)
   complexidade.ts  -> Módulo 6: tabela de complexidade assintótica (O, Ω, Θ)
   cli.ts           -> Menu interativo de console (readline)
+  web/             -> Interface gráfica em React (App.tsx, main.tsx, estilos.css)
 exemplos/
   afd.json         -> Exemplo de AFD do enunciado
   afn.json         -> Exemplo de AFN (cadeias terminadas em "ab")

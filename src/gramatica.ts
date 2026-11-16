@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs';
 import type { ResultadoSimulacao } from './automato';
 import { VAZIO, validarCadeia } from './linguagens';
 
@@ -17,8 +16,8 @@ type EstadoBusca = {
   regras: RegraAplicada[];
 };
 
-export function carregarGramaticaJson(caminhoArquivo: string): Gramatica {
-  const dados = JSON.parse(readFileSync(caminhoArquivo, 'utf-8')) as Partial<Gramatica>;
+export function parsearGramaticaJson(conteudoJson: string): Gramatica {
+  const dados = JSON.parse(conteudoJson) as Partial<Gramatica>;
   if (
     !Array.isArray(dados.variaveis) ||
     !Array.isArray(dados.terminais) ||

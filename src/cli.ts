@@ -1,8 +1,9 @@
+import { readFileSync } from 'node:fs';
 import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 import { analisarCadeia, concatenar, gerarEstrelaKleene, gerarFechoPositivo } from './linguagens';
-import { carregarAutomatoJson, simularAutomato } from './automato';
-import { carregarGramaticaJson, simularGramatica } from './gramatica';
+import { parsearAutomatoJson, simularAutomato } from './automato';
+import { parsearGramaticaJson, simularGramatica } from './gramatica';
 import { simularPilha } from './pilha';
 import { simularTuring } from './turing';
 import { exibirTabelaComplexidade } from './complexidade';
@@ -46,7 +47,7 @@ async function menuLinguagens(): Promise<void> {
 async function menuAutomato(): Promise<void> {
   const caminho = await perguntar('Arquivo JSON [exemplos/afd.json]: ', 'exemplos/afd.json');
   const cadeia = await perguntar('Cadeia de entrada [ab]: ', 'ab');
-  const automato = carregarAutomatoJson(caminho);
+  const automato = parsearAutomatoJson(readFileSync(caminho, 'utf-8'));
   const resultado = simularAutomato(automato, cadeia);
   console.log('\n' + resultado.passos.join('\n'));
 }
@@ -57,7 +58,7 @@ async function menuGramatica(): Promise<void> {
     'exemplos/gramatica.json',
   );
   const cadeia = await perguntar('Cadeia de entrada [aaabbb]: ', 'aaabbb');
-  const gramatica = carregarGramaticaJson(caminho);
+  const gramatica = parsearGramaticaJson(readFileSync(caminho, 'utf-8'));
   const resultado = simularGramatica(gramatica, cadeia);
   console.log('\n' + resultado.passos.join('\n'));
 }

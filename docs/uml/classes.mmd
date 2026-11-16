@@ -24,7 +24,7 @@ classDiagram
     +estadoInicial: string
     +estadosFinais: string[]
     +transicoes: Record~string, Record~string, string[]~~
-    +carregarAutomatoJson(caminho: string) Automato
+    +parsearAutomatoJson(conteudoJson: string) Automato
     +simularAutomato(automato: Automato, cadeia: string) ResultadoSimulacao
   }
 
@@ -34,7 +34,7 @@ classDiagram
     +terminais: string[]
     +simboloInicial: string
     +producoes: Record~string, string[]~
-    +carregarGramaticaJson(caminho: string) Gramatica
+    +parsearGramaticaJson(conteudoJson: string) Gramatica
     +simularGramatica(gramatica: Gramatica, cadeia: string) ResultadoSimulacao
   }
 
@@ -61,12 +61,23 @@ classDiagram
     +iniciarMenu() Promise~void~
   }
 
+  class InterfaceReact {
+    <<src/web/App.tsx>>
+    +App() JSX.Element
+  }
+
   MenuCLI --> ModuloLinguagens
   MenuCLI --> Automato
   MenuCLI --> Gramatica
   MenuCLI --> ModuloPilha
   MenuCLI --> ModuloTuring
   MenuCLI --> ModuloComplexidade
+  InterfaceReact --> ModuloLinguagens
+  InterfaceReact --> Automato
+  InterfaceReact --> Gramatica
+  InterfaceReact --> ModuloPilha
+  InterfaceReact --> ModuloTuring
+  InterfaceReact --> ModuloComplexidade
   ModuloLinguagens ..> ResultadoSimulacao
   Automato ..> ResultadoSimulacao
   Gramatica ..> ResultadoSimulacao
