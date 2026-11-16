@@ -50,7 +50,3 @@ export const TABELA_COMPLEXIDADE: ItemComplexidade[] = [
     pior: 'O(n) — varre a fita uma vez',
   },
 ];
-
-export function exibirTabelaComplexidade(): void {
-  console.table(TABELA_COMPLEXIDADE);
-}

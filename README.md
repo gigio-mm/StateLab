@@ -21,11 +21,8 @@ Projeto prático de **Aspectos Teóricos da Computação (AV3)** — Prof. Ildo 
 # Instalar dependências
 npm install
 
-# Abrir a interface gráfica em React no navegador (Bônus +1,0 ponto)
+# Iniciar a aplicação web em React (http://localhost:5173)
 npm run dev
-
-# Executar o menu interativo no console
-npm run cli
 
 # Executar testes automatizados
 npm test
@@ -34,7 +31,7 @@ npm test
 npm run check
 ```
 
-> Na interface gráfica (`npm run dev`), é possível alternar pelas 6 abas e navegar passo a passo (_Anterior / Próximo_) visualizando os **estados dos autômatos**, a **pilha do AP** e a **fita da Máquina de Turing**. No menu de console (`npm run cli`), basta pressionar **Enter** nas perguntas para usar os valores padrão do enunciado.
+> Na interface gráfica (`npm run dev`), é possível alternar pelas 6 abas e navegar passo a passo (_Anterior / Próximo_) visualizando os **estados dos autômatos**, a **pilha do AP** e a **fita da Máquina de Turing**.
 
 ---
 
@@ -49,14 +46,14 @@ src/
   pilha.ts         -> Módulo 4: Autômato com Pilha para L = { aⁿbⁿ | n ≥ 1 }
   turing.ts        -> Módulo 5: Máquina de Turing para soma unária (Opção B)
   complexidade.ts  -> Módulo 6: tabela de complexidade assintótica (O, Ω, Θ)
-  cli.ts           -> Menu interativo de console (readline)
   web/             -> Interface gráfica em React (App.tsx, main.tsx, estilos.css)
 exemplos/
   afd.json         -> Exemplo de AFD do enunciado
   afn.json         -> Exemplo de AFN (cadeias terminadas em "ab")
   gramatica.json   -> Exemplo de GLC do enunciado (S -> aSb | λ)
 tests/             -> Testes unitários (Vitest) de cada módulo
-docs/              -> Documento técnico e diagramas UML
+docs/
+  documento-tecnico.md -> Documento técnico completo com diagramas UML
 ```
 
 ---
