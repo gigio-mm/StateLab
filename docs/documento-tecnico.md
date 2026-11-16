@@ -17,7 +17,7 @@ O estudo de Teoria da Computação envolve conceitos abstratos — como alfabeto
 
 ### 1.2 Objetivos
 
-Desenvolver o **StateLab**, uma ferramenta educacional em TypeScript executada via console que permite:
+Desenvolver o **StateLab**, uma ferramenta educacional em TypeScript com interface dupla (**Web em React** e **Console CLI**) que permite:
 
 1. Definir alfabetos $\Sigma$ e linguagens formais $L$, validar cadeias e calcular $|w|$, concatenação, $\Sigma^*$ e $\Sigma^+$;
 2. Carregar por JSON e simular passo a passo Autômatos Finitos Determinísticos (AFD) e Não Determinísticos (AFN);
@@ -98,7 +98,7 @@ classDiagram
     +estadoInicial: string
     +estadosFinais: string[]
     +transicoes: Record~string, Record~string, string[]~~
-    +carregarAutomatoJson(caminho: string) Automato
+    +parsearAutomatoJson(conteudoJson: string) Automato
     +simularAutomato(automato: Automato, cadeia: string) ResultadoSimulacao
   }
 
@@ -108,7 +108,7 @@ classDiagram
     +terminais: string[]
     +simboloInicial: string
     +producoes: Record~string, string[]~
-    +carregarGramaticaJson(caminho: string) Gramatica
+    +parsearGramaticaJson(conteudoJson: string) Gramatica
     +simularGramatica(gramatica: Gramatica, cadeia: string) ResultadoSimulacao
   }
 
@@ -135,12 +135,23 @@ classDiagram
     +iniciarMenu() Promise~void~
   }
 
+  class InterfaceReact {
+    <<src/web/App.tsx>>
+    +App() JSX.Element
+  }
+
   MenuCLI --> ModuloLinguagens
   MenuCLI --> Automato
   MenuCLI --> Gramatica
   MenuCLI --> ModuloPilha
   MenuCLI --> ModuloTuring
   MenuCLI --> ModuloComplexidade
+  InterfaceReact --> ModuloLinguagens
+  InterfaceReact --> Automato
+  InterfaceReact --> Gramatica
+  InterfaceReact --> ModuloPilha
+  InterfaceReact --> ModuloTuring
+  InterfaceReact --> ModuloComplexidade
 ```
 
 ---
@@ -156,7 +167,8 @@ classDiagram
 | 3. Gramática    | `src/gramatica.ts`    | Fila (`EstadoBusca[]`) e `Set<string>`      | Busca em largura (BFS) de derivações sem repetir formas sentenciais                  |
 | 4. Pilha (AP)   | `src/pilha.ts`        | Array `string[]` (`push`/`pop`)             | Pilha LIFO explícita com `empilhar` e `desempilhar`                                  |
 | 5. Turing       | `src/turing.ts`       | Array `string[]` + índice numérico `cabeca` | Fita bidirecional expansível com símbolo branco `_`                                  |
-| 6. Complexidade | `src/complexidade.ts` | `ItemComplexidade[]`                        | Tabela assintótica exibida via `console.table`                                       |
+| 6. Complexidade | `src/complexidade.ts` | `ItemComplexidade[]`                        | Tabela assintótica exibida no console e na interface web                             |
+| Interface Web   | `src/web/App.tsx`     | Estados React (`useState`)                  | Exibição visual passo a passo dos estados do autômato, pilha do AP e fita da MT      |
 
 ### 4.2 Algoritmos Implementados
 

@@ -69,7 +69,7 @@ classDiagram
     +estadoInicial: string
     +estadosFinais: string[]
     +transicoes: Record~string, Record~string, string[]~~
-    +carregarAutomatoJson(caminho: string) Automato
+    +parsearAutomatoJson(conteudoJson: string) Automato
     +simularAutomato(automato: Automato, cadeia: string) ResultadoSimulacao
   }
 
@@ -79,7 +79,7 @@ classDiagram
     +terminais: string[]
     +simboloInicial: string
     +producoes: Record~string, string[]~
-    +carregarGramaticaJson(caminho: string) Gramatica
+    +parsearGramaticaJson(conteudoJson: string) Gramatica
     +simularGramatica(gramatica: Gramatica, cadeia: string) ResultadoSimulacao
   }
 
@@ -106,12 +106,23 @@ classDiagram
     +iniciarMenu() Promise~void~
   }
 
+  class InterfaceReact {
+    <<src/web/App.tsx>>
+    +App() JSX.Element
+  }
+
   MenuCLI --> ModuloLinguagens
   MenuCLI --> Automato
   MenuCLI --> Gramatica
   MenuCLI --> ModuloPilha
   MenuCLI --> ModuloTuring
   MenuCLI --> ModuloComplexidade
+  InterfaceReact --> ModuloLinguagens
+  InterfaceReact --> Automato
+  InterfaceReact --> Gramatica
+  InterfaceReact --> ModuloPilha
+  InterfaceReact --> ModuloTuring
+  InterfaceReact --> ModuloComplexidade
   ModuloLinguagens ..> ResultadoSimulacao
   Automato ..> ResultadoSimulacao
   Gramatica ..> ResultadoSimulacao
@@ -125,12 +136,12 @@ classDiagram
 sequenceDiagram
   autonumber
   actor Usuario as Usuário
-  participant CLI as Menu Console (src/cli.ts)
+  participant UI as Interface (React Web / Console CLI)
   participant Modulo as Simulador do Módulo (src/*.ts)
 
-  Usuario->>CLI: Escolhe opção (1 a 6) e informa cadeia de entrada
-  CLI->>Modulo: Executa função do módulo (ex.: simularAutomato / simularGramatica)
+  Usuario->>UI: Escolhe módulo (1 a 6) e informa cadeia de entrada
+  UI->>Modulo: Executa função do módulo (ex.: simularAutomato / simularPilha / simularTuring)
   Modulo->>Modulo: Valida entrada e processa passo a passo
-  Modulo-->>CLI: Retorna { aceita: boolean, passos: string[] }
-  CLI-->>Usuario: Imprime os passos e o resultado final no console
+  Modulo-->>UI: Retorna { aceita: boolean, passos: string[] }
+  UI-->>Usuario: Exibe passo a passo (estados, pilha, fita e resultado final)
 ```
