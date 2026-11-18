@@ -31,7 +31,7 @@ npm test
 npm run check
 ```
 
-> Na interface gráfica (`npm run dev`), é possível alternar pelas 6 abas e navegar passo a passo (_Anterior / Próximo_) visualizando os **estados dos autômatos**, a **pilha do AP** e a **fita da Máquina de Turing**.
+> Na interface gráfica (`npm run dev`), é possível alternar pelas 6 abas e navegar passo a passo (`« Início`, `‹ Anterior`, `Próximo ›` e `Fim »`) visualizando os **estados dos autômatos** (com tabela de transição $\delta$ e cadeia lida), a **árvore de derivação da GLC**, a **pilha do AP** e a **fita da Máquina de Turing**.
 
 ---
 
@@ -62,15 +62,16 @@ docs/
 
 ### Módulo 1 — Linguagens Formais
 
-- **Entrada:** `Σ = {a, b}`, cadeia `abba`
+- **Entrada:** `Σ = {a, b}`, `L = {ab, abba}`, cadeia `w = abba`, cadeia `v = ba`, limite `k = 2`
 - **Saída:**
 
 ```text
 Cadeia válida para Σ
 Tamanho = 4
-Concatenação (abba + ba) = abbaba
-Σ* (até 2) = { λ, a, b, aa, ab, ba, bb }
-Σ+ (até 2) = { a, b, aa, ab, ba, bb }
+Pertence a L
+w · v = abbaba
+Σ* (até tamanho 2) = { λ, a, b, aa, ab, ba, bb }
+Σ+ (até tamanho 2) = { a, b, aa, ab, ba, bb }
 ```
 
 ### Módulo 2 — Simulador de Autômato Finito (`exemplos/afd.json`)

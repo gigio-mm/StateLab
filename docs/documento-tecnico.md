@@ -34,8 +34,8 @@ Desenvolver o **StateLab**, uma ferramenta educacional web em TypeScript e React
 
 - **Alfabeto ($\Sigma$):** conjunto finito e não vazio de símbolos.
 - **Cadeia ($w$):** sequência finita de símbolos de $\Sigma$. O comprimento $|w|$ indica a quantidade de símbolos, e $\lambda$ representa a cadeia vazia ($|\lambda| = 0$).
-- **Fecho Positivo ($\Sigma^+$) e Fecho de Kleene ($\Sigma^\*$):** $\Sigma^+$ é o conjunto de todas as cadeias não vazias sobre $\Sigma$, e $\Sigma^* = \Sigma^+ \cup \{\lambda\}$.
-- **Linguagem Formal ($L$):** qualquer subconjunto $L \subseteq \Sigma^*$.
+- **Fecho Positivo ($\Sigma^+$) e Fecho de Kleene ($\Sigma^\ast$):** $\Sigma^+$ é o conjunto de todas as cadeias não vazias sobre $\Sigma$, e $\Sigma^\ast = \Sigma^+ \cup \{\lambda\}$.
+- **Linguagem Formal ($L$):** qualquer subconjunto $L \subseteq \Sigma^\ast$.
 
 ### 2.2 Autômatos Finitos (AFD e AFN)
 
@@ -132,6 +132,12 @@ classDiagram
   class InterfaceReact {
     <<src/web/App.tsx>>
     +App() JSX.Element
+    +ModuloLinguagens() JSX.Element
+    +ModuloAutomato() JSX.Element
+    +ModuloGramatica() JSX.Element
+    +ModuloPilha() JSX.Element
+    +ModuloTuring() JSX.Element
+    +ModuloComplexidade() JSX.Element
   }
 
   InterfaceReact --> ModuloLinguagens
@@ -148,23 +154,24 @@ classDiagram
 
 ### 4.1 Estruturas de Dados Utilizadas
 
-| Módulo          | Arquivo               | Estrutura Principal                         | Finalidade                                                                           |
-| --------------- | --------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------ |
-| 1. Linguagens   | `src/linguagens.ts`   | `Set<string>` e `string[]`                  | Busca $O(1)$ de símbolos em $\Sigma$ e geração em camadas de $\Sigma^*$ e $\Sigma^+$ |
-| 2. Autômatos    | `src/automato.ts`     | `Record<string, Record<string, string[]>>`  | Tabela de transições unificada para AFD e AFN                                        |
-| 3. Gramática    | `src/gramatica.ts`    | Fila (`EstadoBusca[]`) e `Set<string>`      | Busca em largura (BFS) de derivações sem repetir formas sentenciais                  |
-| 4. Pilha (AP)   | `src/pilha.ts`        | Array `string[]` (`push`/`pop`)             | Pilha LIFO explícita com `empilhar` e `desempilhar`                                  |
-| 5. Turing       | `src/turing.ts`       | Array `string[]` + índice numérico `cabeca` | Fita bidirecional expansível com símbolo branco `_`                                  |
-| 6. Complexidade | `src/complexidade.ts` | `ItemComplexidade[]`                        | Tabela assintótica exibida na interface web                                          |
-| Interface Web   | `src/web/App.tsx`     | Estados React (`useState`)                  | Exibição visual passo a passo dos estados do autômato, pilha do AP e fita da MT      |
+| Módulo          | Arquivo               | Estrutura Principal                         | Finalidade                                                                             |
+| --------------- | --------------------- | ------------------------------------------- | -------------------------------------------------------------------------------------- |
+| 1. Linguagens   | `src/linguagens.ts`   | `Set<string>` e `string[]`                  | Busca $O(1)$ de símbolos em $\Sigma$ e geração em camadas de $\Sigma^{*}$ e $\Sigma^+$ |
+| 2. Autômatos    | `src/automato.ts`     | `Record<string, Record<string, string[]>>`  | Tabela de transições unificada para AFD e AFN                                          |
+| 3. Gramática    | `src/gramatica.ts`    | Fila (`EstadoBusca[]`) e `Set<string>`      | Busca em largura (BFS) de derivações sem repetir formas sentenciais                    |
+| 4. Pilha (AP)   | `src/pilha.ts`        | Array `string[]` (`push`/`pop`)             | Pilha LIFO explícita com `empilhar` e `desempilhar`                                    |
+| 5. Turing       | `src/turing.ts`       | Array `string[]` + índice numérico `cabeca` | Fita bidirecional expansível com símbolo branco `_`                                    |
+| 6. Complexidade | `src/complexidade.ts` | `ItemComplexidade[]`                        | Tabela assintótica exibida na interface web                                            |
+| Interface Web   | `src/web/App.tsx`     | Estados React (`useState`)                  | Abas dos 6 módulos e visualização passo a passo (estados, árvore, pilha e fita da MT)  |
 
-### 4.2 Algoritmos Implementados
+### 4.2 Algoritmos e Componentes Visuais Implementados
 
 1. **Validação e Geração de Fechos (`src/linguagens.ts`):** `validarCadeia` converte $\Sigma$ em um `Set` e verifica cada símbolo da entrada. `gerarFechoPositivo` constrói iterativamente as palavras de tamanho $1$ a $k$ concatenando cada símbolo de $\Sigma$ às palavras do nível anterior.
 2. **Simulação Unificada AFD/AFN (`src/automato.ts`):** `simularAutomato` mantém a lista de estados ativos (iniciando no fecho-$\lambda$ de $q_0$). A cada símbolo lido, une os estados de destino e aplica o fecho-$\lambda$, registrando o caminho `q0 -> q1 -> q2` e aceitando se algum estado final estiver ativo ao término da cadeia.
 3. **Derivação Mais à Esquerda com Poda (`src/gramatica.ts`):** `simularGramatica` executa uma busca em largura (BFS) expandindo sempre a primeira variável da forma sentencial. A função `podeGerarAlvo` poda formas cujo número de terminais excede $|w|$ ou cujo prefixo terminal diverge de $w$. Ao atingir $w$, `montarArvoreTexto` reconstrói a árvore indentada a partir das regras usadas.
 4. **Simulação de AP para $a^n b^n$ (`src/pilha.ts`):** `simularPilha` percorre a entrada mantendo o estado (`q0` na leitura de `a`, `q1` na leitura de `b`) e uma pilha onde cada `a` empilha `A` e cada `b` desempilha `A`, aceitando em `q1` com pilha vazia.
 5. **Soma Unária na Máquina de Turing (`src/turing.ts`):** `simularTuring` percorre os `0`s do primeiro número em `q0`, substitui o separador `1` por `0` indo para `q1`, avança até o branco `_` final, recua uma posição em `q2`, apaga o último `0` e para no estado de aceitação `qf`.
+6. **Interface Gráfica Passo a Passo (`src/web/App.tsx`):** organiza cada módulo em seções padronizadas (_Entrada_, _Visualização passo a passo_ e _Resultado_), destacando o símbolo lido na cadeia, os círculos de estados do autômato junto à tabela de transição $\delta$, a árvore de derivação colorida da GLC, a pilha visual e tabela interativa do AP e a fita com cabeçote `▼` da Máquina de Turing.
 
 ---
 
@@ -172,26 +179,18 @@ classDiagram
 
 Considere $n = |w|$ (comprimento da cadeia de entrada), $|\Sigma|$ o tamanho do alfabeto, $|Q|$ o número de estados, $b$ o fator máximo de ramificação das produções da GLC e $d$ a profundidade da derivação.
 
-| Algoritmo                                      | Melhor Caso ($\Omega$) | Caso Médio ($\Theta$)   | Pior Caso ($O$)      | Justificativa                                                                                                                         |
-| ---------------------------------------------- | ---------------------- | ----------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| **M1: Validar cadeia em $\Sigma^\*$**          | $\Omega(1)$            | $\Theta(n)$             | $O(n)$               | Consulta em `Set` é $O(1)$; para no 1º símbolo inválido (melhor) ou lê $n$ símbolos (pior).                                           |
-| **M1: Gerar $\Sigma^\*$ e $\Sigma^+$ até $k$** | $\Omega(\|\Sigma\|^k)$ | $\Theta(\|\Sigma\|^k)$  | $O(\|\Sigma\|^k)$    | Sempre gera todas as $\sum_{i=1}^{k} \|\Sigma\|^i = \Theta(\|\Sigma\|^k)$ cadeias.                                                    |
-| **M1: Tamanho e concatenação**                 | $\Omega(1)$            | $\Theta(\|u\|+\|v\|)$   | $O(\|u\|+\|v\|)$     | Tamanho é propriedade da string; concatenação copia os caracteres de $u$ e $v$.                                                       |
-| **M2: Simulação AFD / AFN**                    | $\Omega(1)$            | $\Theta(n \cdot \|Q\|)$ | $O(n \cdot \|Q\|^2)$ | Para cada um dos $n$ símbolos, percorre até $\|Q\|$ estados ativos e suas transições (no AFD puro, $\|Q\|$ ativo $= 1$, logo $O(n)$). |
-| **M3: Derivação GLC (BFS c/ poda)**            | $\Omega(n)$            | $\Theta(b^d)$           | $O(b^d)$             | Gramáticas determinísticas expandem linearmente; no pior caso a busca em largura explora até $b^d$ formas sentenciais.                |
-| **M4: Simulação AP ($a^n b^n$)**               | $\Omega(1)$            | $\Theta(n)$             | $O(n)$               | Cada símbolo executa uma busca constante na tabela de 3 regras e `push`/`pop` em $O(1)$.                                              |
-| **M5: Máquina de Turing (soma unária)**        | $\Omega(1)$            | $\Theta(n)$             | $O(n)$               | O cabeçote percorre os $n$ símbolos até o branco no fim da fita e recua 1 célula ($n + 2$ passos).                                    |
+| Algoritmo                                        | Melhor Caso ($\Omega$) | Caso Médio ($\Theta$)   | Pior Caso ($O$)      | Justificativa                                                                                                                         |
+| ------------------------------------------------ | ---------------------- | ----------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **M1: Validar cadeia em $\Sigma^\ast$**          | $\Omega(1)$            | $\Theta(n)$             | $O(n)$               | Consulta em `Set` é $O(1)$; para no 1º símbolo inválido (melhor) ou lê $n$ símbolos (pior).                                           |
+| **M1: Gerar $\Sigma^\ast$ e $\Sigma^+$ até $k$** | $\Omega(\|\Sigma\|^k)$ | $\Theta(\|\Sigma\|^k)$  | $O(\|\Sigma\|^k)$    | Sempre gera todas as $\sum_{i=1}^{k} \|\Sigma\|^i = \Theta(\|\Sigma\|^k)$ cadeias.                                                    |
+| **M1: Tamanho e concatenação**                   | $\Omega(1)$            | $\Theta(\|u\|+\|v\|)$   | $O(\|u\|+\|v\|)$     | Tamanho é propriedade da string; concatenação copia os caracteres de $u$ e $v$.                                                       |
+| **M2: Simulação AFD / AFN**                      | $\Omega(1)$            | $\Theta(n \cdot \|Q\|)$ | $O(n \cdot \|Q\|^2)$ | Para cada um dos $n$ símbolos, percorre até $\|Q\|$ estados ativos e suas transições (no AFD puro, $\|Q\|$ ativo $= 1$, logo $O(n)$). |
+| **M3: Derivação GLC (BFS c/ poda)**              | $\Omega(n)$            | $\Theta(b^d)$           | $O(b^d)$             | Gramáticas determinísticas expandem linearmente; no pior caso a busca em largura explora até $b^d$ formas sentenciais.                |
+| **M4: Simulação AP ($a^n b^n$)**                 | $\Omega(1)$            | $\Theta(n)$             | $O(n)$               | Cada símbolo executa uma busca constante na tabela de 3 regras e `push`/`pop` em $O(1)$.                                              |
+| **M5: Máquina de Turing (soma unária)**          | $\Omega(1)$            | $\Theta(n)$             | $O(n)$               | O cabeçote percorre os $n$ símbolos até o branco no fim da fita e recua 1 célula ($n + 2$ passos).                                    |
 
 ---
 
 ## 6. Conclusão
 
 O **StateLab** cumpre todos os requisitos funcionais e técnicos propostos na disciplina de Aspectos Teóricos da Computação, permitindo experimentar na prática a Hierarquia de Chomsky (Linguagens Regulares com AFD/AFN, Livres de Contexto com GLC/AP e Recursivamente Enumeráveis com Máquina de Turing) e relacionar cada modelo à sua complexidade assintótica. A escolha de uma arquitetura enxuta em TypeScript, com um módulo por arquivo e saída passo a passo padronizada, tornou o código direto, testável e simples de demonstrar.
-
----
-
-## Referências
-
-- SIPSER, Michael. _Introdução à Teoria da Computação_. 2ª ed. São Paulo: Cengage Learning, 2007.
-- HOPCROFT, John E.; ULLMAN, Jeffrey D.; MOTWANI, Rajeev. _Introdução à Teoria de Autômatos, Linguagens e Computação_. 2ª ed. Rio de Janeiro: Elsevier, 2002.
-- MENEZES, Paulo Blauth. _Linguagens Formais e Autômatos_. 6ª ed. Porto Alegre: Bookman, 2010.
